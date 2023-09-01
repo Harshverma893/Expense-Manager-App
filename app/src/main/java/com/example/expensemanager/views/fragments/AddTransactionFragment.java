@@ -2,16 +2,21 @@ package com.example.expensemanager.views.fragments;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.Toast;
 
 import com.example.expensemanager.R;
 import com.example.expensemanager.Utills.Constants;
@@ -62,6 +67,7 @@ public class AddTransactionFragment extends BottomSheetDialogFragment {
            binding.incomeBtn.setTextColor(getContext().getColor(R.color.greenColor));
 
            transaction.setType(Constants.INCOME);
+           updateSaveButtonState();
        });
 
        binding.expenseBtn.setOnClickListener(view ->{
@@ -70,6 +76,7 @@ public class AddTransactionFragment extends BottomSheetDialogFragment {
            binding.expenseBtn.setTextColor(getContext().getColor(R.color.redColor));
            binding.incomeBtn.setTextColor(getContext().getColor(R.color.textColor));
            transaction.setType(Constants.EXPENSE);
+           updateSaveButtonState();
        });
 
 
@@ -92,6 +99,7 @@ public class AddTransactionFragment extends BottomSheetDialogFragment {
                });
 
                datePickerDialog.show();
+               updateSaveButtonState();
            }
        });
 
@@ -112,6 +120,7 @@ public class AddTransactionFragment extends BottomSheetDialogFragment {
            dialogBinding.recyclerView.setLayoutManager(new GridLayoutManager(getContext(),3));
            dialogBinding.recyclerView.setAdapter(categoryAdapter);
            categoryDialog.show();
+           updateSaveButtonState();
        });
 
        binding.account.setOnClickListener(c ->{
@@ -138,10 +147,12 @@ public class AddTransactionFragment extends BottomSheetDialogFragment {
            dialogBinding.recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
            dialogBinding.recyclerView.setAdapter(accountsAdapter);
            accountDialog.show();
+           updateSaveButtonState();
        });
         binding.saveTransactionBtn.setOnClickListener(c-> {
             double amount = Double.parseDouble(binding.amount.getText().toString());
             String note = binding.note.getText().toString();
+
 
             if(transaction.getType().equals(Constants.EXPENSE)) {
                 transaction.setAmount(amount*-1);
@@ -153,9 +164,30 @@ public class AddTransactionFragment extends BottomSheetDialogFragment {
 
             ((MainActivity)getActivity()).viewModel.addTransaction(transaction);
             ((MainActivity)getActivity()).getTransactions();
+            updateSaveButtonState();
             dismiss();
         });
-
+//binding.incomeBtn.addTextChangedListener(TransactionTextWatcher);
+//binding.expenseBtn.addTextChangedListener(TransactionTextWatcher);
+//binding.date.addTextChangedListener(TransactionTextWatcher);
+//binding.amount.addTextChangedListener(TransactionTextWatcher);
+//binding.account.addTextChangedListener(TransactionTextWatcher);
+//binding.category.addTextChangedListener(TransactionTextWatcher);
+//binding.note.addTextChangedListener(TransactionTextWatcher);
         return binding.getRoot();
+    }
+    private void updateSaveButtonState() {
+        String amount = binding.amount.getText().toString().trim();
+        String date = binding.date.getText().toString().trim();
+        String note = binding.note.getText().toString().trim();
+        String category = binding.category.getText().toString().trim();
+        String account = binding.account.getText().toString().trim();
+        boolean incomeBtnSelected = binding.incomeBtn.isSelected();
+        boolean expenseBtnSelected = binding.expenseBtn.isSelected();
+
+        // Check if either incomeBtn or expenseBtn is selected, and all input fields are not empty
+        binding.saveTransactionBtn.setEnabled(!note.isEmpty() && !amount.isEmpty() && !date.isEmpty() && !category.isEmpty() && !account.isEmpty());
+
+//        binding.saveTransactionBtn.setEnabled(isSaveEnabled);
     }
 }

@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-      //  ArrayList<Transaction> transactions = new ArrayList<>();
+        //  ArrayList<Transaction> transactions = new ArrayList<>();
 //        transactions.add(new Transaction(Constants.INCOME,"Business","Cash","some note here!",new Date(),500,2));
 //        transactions.add(new Transaction(Constants.EXPENSE,"Investment","Bank","some note here!",new Date(),-30,4));
 //        transactions.add(new Transaction(Constants.INCOME,"Food","Cash","some note here!",new Date(),100,5));
@@ -158,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
         else if (Constants.SELECTED_TAB ==Constants.MONTH){
             binding.currentDate.setText(Helper.DateFormatbyMonth(calendar.getTime()));
         }
-    //    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMMM, yyyy");
+        //    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMMM, yyyy");
         viewModel.getTransactions(calendar);
     }
 
