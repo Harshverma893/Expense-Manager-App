@@ -152,6 +152,9 @@ public class MainActivity extends AppCompatActivity {
         viewModel.getTransactions(calendar);
     }
     void updateDate(){
+
+        calendar = Calendar.getInstance();
+
         if (Constants.SELECTED_TAB ==Constants.DAILY){
             binding.currentDate.setText(Helper.DateFormat(calendar.getTime()));
         }
